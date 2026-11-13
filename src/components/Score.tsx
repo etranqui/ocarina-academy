@@ -11,14 +11,14 @@ import { beatsPerBar } from "@/engine/audio/schedule";
  * the usual convention for Alto C ocarina music (keeps notes on the staff).
  */
 
-const S = 12; // staff line spacing
+export const S = 12; // staff line spacing
 const MAX_W = 1000; // widest system (viewBox units)
 const MIN_W = 420;
 /** viewBox units per CSS pixel: keeps the staff readable on phones (fewer bars per line). */
 const UNITS_PER_PX = 1.4;
 const SYS_H = 150;
-const STAFF_TOP = 34;
-const BOTTOM = STAFF_TOP + 4 * S; // E4 line (written)
+export const STAFF_TOP = 34;
+export const BOTTOM = STAFF_TOP + 4 * S; // E4 line (written)
 const CLEF_W = 54;
 const TS_W = 30;
 
@@ -50,11 +50,11 @@ function noteValue(beats: number): { base: number; dotted: boolean } {
 }
 
 /** Staff position of a written pitch: 0 = bottom line (E4), 1 = first space … */
-function staffPos(soundingMidi: number) {
+export function staffPos(soundingMidi: number) {
   const { step, octave } = parsePitch(midiToPitch(soundingMidi - 12));
   return octave * 7 + "CDEFGAB".indexOf(step) - 30;
 }
-const yOf = (p: number) => BOTTOM - (p * S) / 2;
+export const yOf = (p: number) => BOTTOM - (p * S) / 2;
 
 function itemWidth(it: Item) {
   const w = 26 + 22 * Math.pow(Math.min(it.beats, 4), 0.6);
@@ -113,7 +113,7 @@ function layout(t: Timeline, ts: [number, number], W: number): System[] {
   return systems;
 }
 
-function Clef() {
+export function Clef() {
   return (
     // Drawn for STAFF_TOP = 34, S = 12 (lines at y 34–82; the spiral wraps the G line at y 70).
     // Stem rises from the dot-hook, the top loop bulges right, crosses the stem and

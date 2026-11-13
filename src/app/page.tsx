@@ -129,6 +129,13 @@ export default function HomePage() {
             </p>
           </div>
         </section>
+
+        <p className="text-center text-sm text-parchment-300/60">
+          A free, fan-made learning companion.{" "}
+          <Link href="/credits/" className="text-gold-300/90 underline hover:text-gold-200">
+            About &amp; credits
+          </Link>
+        </p>
       </div>
     </>
   );

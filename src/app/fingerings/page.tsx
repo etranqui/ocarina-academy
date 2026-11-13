@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { FingeringExplorer } from "@/components/FingeringExplorer";
 import { OcarinaDiagram } from "@/components/OcarinaDiagram";
-import { chart, DEFAULT_PROFILE, HOLE_LABEL } from "@/engine/fingering/engine";
-import { displayPitch } from "@/engine/music/pitch";
+import { DEFAULT_PROFILE, HOLE_LABEL } from "@/engine/fingering/engine";
 
 export const metadata: Metadata = { title: "Fingering chart" };
 
 export default function FingeringsPage() {
   const profile = DEFAULT_PROFILE;
-  const rows = chart(profile);
-  const reasons = new Map(profile.undefinedNotes.flatMap((u) => u.pitches.map((p) => [p, u.reason] as const)));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
@@ -19,46 +17,29 @@ export default function FingeringsPage() {
         <p className="mx-auto max-w-2xl font-serif text-parchment-200/70">{profile.name}. {profile.description}</p>
       </header>
 
-      <section className="parchment mb-10 grid gap-6 p-5 sm:p-8 md:grid-cols-[1.4fr_1fr] md:items-center">
-        <OcarinaDiagram pitch="C5" showLabels />
-        <div className="text-ink-700">
-          <h2 className="font-display text-lg text-ink-900">Reading the diagrams</h2>
-          <p className="mt-2 text-sm">
-            Seen from above while you play: mouthpiece toward you, left hand on the wide end.{" "}
-            <span className="font-medium text-leaf-500">Green</span> holes are covered; open holes are dark.
-            Dashed rings are the two thumb holes underneath.
-          </p>
-          <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-            {profile.holes.map((h) => (
-              <li key={h.id}>
-                <span className="inline-block w-7 font-semibold text-ink-900">{h.id}</span>
-                {HOLE_LABEL[h.id]}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <FingeringExplorer />
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-        {rows.map(({ pitch, fingering }) => (
-          <article
-            key={pitch}
-            className={`parchment flex flex-col p-4 ${fingering ? "" : "opacity-55 saturate-50"}`}
-            aria-label={`${displayPitch(pitch)} fingering`}
-          >
-            <div className="flex items-baseline justify-between">
-              <h3 className="font-display text-2xl text-ink-900">{displayPitch(pitch)}</h3>
-              {!fingering && (
-                <span className="border border-ink-500/40 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-ink-500">
-                  Not defined
-                </span>
-              )}
-            </div>
-            <OcarinaDiagram pitch={fingering ? pitch : null} variant="compact" />
-            <p className="mt-1 text-xs text-ink-700">{fingering ? fingering.note ?? " " : reasons.get(pitch)}</p>
-          </article>
-        ))}
-      </div>
+      <details className="parchment mt-12 p-5 sm:p-8">
+        <summary className="cursor-pointer font-display text-lg text-ink-900">How to read the diagrams</summary>
+        <div className="mt-4 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-center">
+          <OcarinaDiagram pitch="C5" showLabels />
+          <div className="text-ink-700">
+            <p className="text-sm">
+              Seen from above while you play: mouthpiece toward you, left hand on the wide end.{" "}
+              <span className="font-medium text-leaf-500">Green</span> holes are covered; open holes are dark.
+              Dashed rings are the two thumb holes underneath.
+            </p>
+            <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+              {profile.holes.map((h) => (
+                <li key={h.id}>
+                  <span className="inline-block w-7 font-semibold text-ink-900">{h.id}</span>
+                  {HOLE_LABEL[h.id]}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </details>
     </div>
   );
 }

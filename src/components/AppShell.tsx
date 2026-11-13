@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAV = [
+// desktopOnly: kept out of the mobile tab bar, where space is for the core features
+// (on phones, Credits is linked from the footer and the home page).
+const NAV: { href: string; label: string; icon: string; desktopOnly?: boolean }[] = [
   { href: "/", label: "Home", icon: "M4 11 L12 4 L20 11 M6 10 V20 H18 V10" },
   { href: "/library", label: "Song Library", icon: "M5 4 V20 M10 4 V20 M15 5 L19 19 M5 4 H10" },
   { href: "/fingerings", label: "Fingerings", icon: "M3 13 C3 8 9 6 15 7 C19 8 21 10 21 12 C21 15 16 17 10 17 C6 17 3 16 3 13 Z" },
   { href: "/progress", label: "Progress", icon: "M6 20 V14 M12 20 V9 M18 20 V5 M3 20 H21" },
-  { href: "/credits", label: "Credits", icon: "M12 3 L14.6 9 L21 9.5 L16 13.6 L17.6 20 L12 16.6 L6.4 20 L8 13.6 L3 9.5 L9.4 9 Z" },
+  { href: "/credits", label: "Credits", desktopOnly: true, icon: "M12 3 L14.6 9 L21 9.5 L16 13.6 L17.6 20 L12 16.6 L6.4 20 L8 13.6 L3 9.5 L9.4 9 Z" },
 ];
 
 function isActive(path: string, href: string) {
@@ -58,9 +60,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Mobile tab bar */}
       <nav
         aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-gold-500/25 bg-forest-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-gold-500/25 bg-forest-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md sm:hidden"
       >
-        {NAV.map((n) => (
+        {NAV.filter((n) => !n.desktopOnly).map((n) => (
           <Link
             key={n.href}
             href={n.href}
