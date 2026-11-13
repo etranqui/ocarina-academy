@@ -42,6 +42,11 @@ to Nintendo. The arrangements were put together with help from the ocarina commu
 app's [Credits page](https://etranqui.github.io/ocarina-academy/credits/). This is a fan-made learning tool,
 not affiliated with or endorsed by Nintendo. All artwork in the app is original.
 
+## License
+
+The code and the original artwork are under the [MIT License](LICENSE). The music is not: the songs
+and the game belong to Nintendo.
+
 ---
 
 # For developers
