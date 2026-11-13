@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 600" width="1120" height="600">
+  <!-- Original illustration of a blue glazed 12-hole ocarina, player's view.
+       Hole recesses match src/engine/fingering/profiles/oot-replica-alto-c.ts -->
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b8ee0"/>
+      <stop offset="0.35" stop-color="#3567bd"/>
+      <stop offset="0.75" stop-color="#21468f"/>
+      <stop offset="1" stop-color="#142d63"/>
+    </linearGradient>
+    <radialGradient id="bodyLight" cx="0.32" cy="0.28" r="0.75">
+      <stop offset="0" stop-color="#9cc2ff" stop-opacity="0.55"/>
+      <stop offset="0.45" stop-color="#5d8fe0" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#0b1f4d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8b9099"/>
+      <stop offset="0.25" stop-color="#e3e6ea"/>
+      <stop offset="0.5" stop-color="#b7bcc4"/>
+      <stop offset="0.78" stop-color="#eef0f2"/>
+      <stop offset="1" stop-color="#7d828b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b0"/>
+      <stop offset="0.45" stop-color="#e2b84f"/>
+      <stop offset="1" stop-color="#9c7020"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1d3f86"/>
+      <stop offset="0.4" stop-color="#4a7fd6"/>
+      <stop offset="1" stop-color="#173575"/>
+    </linearGradient>
+    <radialGradient id="hole" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset="0.7" stop-color="#05091a"/>
+      <stop offset="1" stop-color="#1b2f63"/>
+    </radialGradient>
+    <radialGradient id="dimple" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.55" stop-color="#2a56a8" stop-opacity="0"/>
+      <stop offset="1" stop-color="#6e9be6" stop-opacity="0.5"/>
+    </radialGradient>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#06130b" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="bodyClip">
+      <path id="bodyPath" d="M1108 160 C1000 90 700 38 420 40 C228 42 72 88 60 200 C50 300 128 362 292 364 C520 362 800 302 962 240 C1042 210 1098 182 1108 160 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- mouthpiece (points toward the player) -->
+  <g filter="url(#soft)">
+    <!-- continues the collar's taper on the same axis (x = 420) -->
+    <path d="M314 446 L343 532 C350 578 490 578 497 532 L526 446 Z" fill="url(#cap)"/>
+    <path d="M352 520 C360 556 480 556 488 520" fill="none" stroke="#7aa4ec" stroke-width="3" opacity="0.35"/>
+    <ellipse cx="420" cy="552" rx="58" ry="12" fill="#2d5cb0" opacity="0.6"/>
+    <rect x="392" y="552" width="56" height="8" rx="4" fill="#0a1636"/>
+
+    <!-- body -->
+    <use href="#bodyPath" fill="url(#body)"/>
+  </g>
+  <g clip-path="url(#bodyClip)">
+    <use href="#bodyPath" fill="url(#bodyLight)"/>
+    <!-- underside shadow -->
+    <path d="M40 260 C140 380 520 380 1000 220 L1120 260 L1120 600 L0 600 Z" fill="#0a1d47" opacity="0.35"/>
+    <!-- glaze highlight -->
+    <path d="M150 92 C300 52 640 50 900 108 C700 82 360 80 170 120 Z" fill="url(#gloss)" opacity="0.65"/>
+    <ellipse cx="190" cy="140" rx="60" ry="22" fill="#fff" opacity="0.10"/>
+    <!-- finger dimples around sub-hole pairs -->
+    <circle cx="335" cy="214" r="64" fill="url(#dimple)"/>
+    <circle cx="690" cy="160" r="46" fill="url(#dimple)"/>
+  </g>
+  <use href="#bodyPath" fill="none" stroke="#0e2457" stroke-width="3" opacity="0.6"/>
+
+  <!-- collar: engraved silver band with the Triforce, symmetric about x = 420 -->
+  <g>
+    <path d="M282 352 C380 340 470 336 558 332 L526 462 L314 462 Z" fill="url(#silver)" stroke="#5f646d" stroke-width="2"/>
+    <g fill="none" stroke="#6b7079" stroke-width="3" opacity="0.8">
+      <path d="M298 376 C390 366 470 362 550 358"/>
+      <path d="M318 446 L522 446"/>
+      <path d="M322 404 l14 18 l14 -18 l14 18 M476 404 l14 18 l14 -18 l14 18"/>
+    </g>
+    <g fill="none" stroke="#f7f8fa" stroke-width="1.5" opacity="0.7">
+      <path d="M298 379 C390 369 470 365 550 361"/>
+      <path d="M318 449 L522 449"/>
+    </g>
+    <!-- recessed triangular plate -->
+    <path d="M420 362 L476 452 L364 452 Z" fill="#8d929b" stroke="#5f646d" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M420 370 L469 448 L371 448 Z" fill="none" stroke="#eef0f2" stroke-width="1.5" opacity="0.8" stroke-linejoin="round"/>
+    <!-- Triforce: three gold triangles around an inverted empty one -->
+    <g fill="url(#gold)" stroke="#7a5414" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M420 380 L438.5 411 L401.5 411 Z"/>
+      <path d="M401.5 411 L420 442 L383 442 Z"/>
+      <path d="M438.5 411 L457 442 L420 442 Z"/>
+    </g>
+    <path d="M401.5 411 L438.5 411 L420 442 Z" fill="#5a5f68"/>
+    <g fill="#fff6cf" opacity="0.55">
+      <path d="M420 386 L425 395 L415 395 Z"/>
+      <path d="M401.5 417 L406.5 426 L396.5 426 Z"/>
+      <path d="M438.5 417 L443.5 426 L433.5 426 Z"/>
+    </g>
+  </g>
+
+  <!-- hole recesses (finger-side). Thumb holes are on the underside. -->
+  <g fill="url(#hole)" stroke="#0c1c44" stroke-width="2">
+    <circle cx="215" cy="177" r="30"/>
+    <circle cx="325" cy="185" r="33"/>
+    <circle cx="345" cy="250" r="9"/>
+    <circle cx="445" cy="180" r="29"/>
+    <circle cx="565" cy="122" r="25"/>
+    <circle cx="590" cy="248" r="26"/>
+    <circle cx="688" cy="135" r="9"/>
+    <circle cx="690" cy="182" r="15"/>
+    <circle cx="816" cy="163" r="22"/>
+    <circle cx="928" cy="155" r="14"/>
+  </g>
+  <!-- rim catch-lights -->
+  <g fill="none" stroke="#9fc0ff" stroke-width="2" opacity="0.45">
+    <path d="M196 200 A30 30 0 0 0 242 196"/>
+    <path d="M303 211 A33 33 0 0 0 355 204"/>
+    <path d="M426 203 A29 29 0 0 0 470 197"/>
+    <path d="M549 142 A25 25 0 0 0 587 137"/>
+    <path d="M572 268 A26 26 0 0 0 612 263"/>
+    <path d="M801 180 A22 22 0 0 0 834 176"/>
+  </g>
+</svg>
