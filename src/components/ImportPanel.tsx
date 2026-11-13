@@ -34,7 +34,7 @@ export function ImportPanel({ song, onSaved }: { song: Song; onSaved?: () => voi
   const [track, setTrack] = useState(0);
   const [shift, setShift] = useState("auto");
   const [bars, setBars] = useState(4);
-  const [complete, setComplete] = useState(false);
+  const complete = false; // imported files are never marked verified
 
   async function onFile(file: File) {
     setError(null);
@@ -91,7 +91,7 @@ export function ImportPanel({ song, onSaved }: { song: Song; onSaved?: () => voi
       <h2 className="font-display text-lg text-parchment-50">Import a full arrangement</h2>
       <p className="mt-1 text-sm text-parchment-200/70">
         MusicXML (.musicxml) or MIDI (.mid) that you own or are licensed to use. The file is read in your browser and saved on
-        this device only. It&apos;s fitted to the Alto C range and checked against the replica&apos;s verified fingerings.
+        this device only. It&apos;s fitted to the Alto C range and checked against the replica&apos;s fingerings.
       </p>
 
       {imported && !loaded && (
@@ -182,9 +182,9 @@ export function ImportPanel({ song, onSaved }: { song: Song; onSaved?: () => voi
               )}
               {result.report.unplayable.length > 0 && (
                 <p className="border border-gold-400/40 bg-gold-500/10 p-3 text-sm text-gold-200">
-                  No verified fingering yet for:{" "}
+                  No fingering yet for:{" "}
                   {result.report.unplayable.map((u) => `${displayPitch(u.pitch)} (×${u.count})`).join(", ")}. These notes still play and show in
-                  the score, but the diagram will say the fingering isn&apos;t defined, and the arrangement stays “Partial”.
+                  the score, but the diagram will say the fingering isn&apos;t defined.
                 </p>
               )}
               {result.melody.warnings.length > 0 && (
@@ -193,16 +193,6 @@ export function ImportPanel({ song, onSaved }: { song: Song; onSaved?: () => voi
                 </ul>
               )}
 
-              <label className="flex items-start gap-2 text-sm text-parchment-100">
-                <input type="checkbox" checked={complete} onChange={(e) => setComplete(e.target.checked)} className="mt-1 accent-leaf-500" />
-                <span>
-                  This file is the complete song, from start to finish.
-                  <span className="block text-xs text-parchment-300/60">
-                    Only then — and only if every note is playable — is it labelled “Verified”. Otherwise it&apos;s saved as “Partial”.
-                  </span>
-                </span>
-              </label>
-
               <div className="flex items-center gap-3">
                 <button
                   onClick={save}
@@ -210,9 +200,6 @@ export function ImportPanel({ song, onSaved }: { song: Song; onSaved?: () => voi
                 >
                   Save as full arrangement
                 </button>
-                <span className="text-xs text-parchment-300/60">
-                  Will be labelled: {result.arrangement.status === "verified" ? "Verified" : "Partial"}
-                </span>
               </div>
             </>
           )}

@@ -12,7 +12,7 @@ Nintendo trademark, fine for personal use but worth revisiting before any public
 | Area | What matters most | Consequence for design |
 |---|---|---|
 | Single source of truth | Audio, score, fingering, practice and validation must never disagree | One `Song → Arrangement → Phrase → Event` model, flattened once into a **timeline**; every feature consumes the timeline |
-| Honest content | No fabricated transcriptions, no placeholder posing as a full song | Every arrangement carries `status` + `source`; UI badges are derived from `status`, never hand-written |
+| Honest content | No fabricated transcriptions, no placeholder posing as a full song | Every arrangement carries `status` + `source` in the data (kept for tests and maintainers; the UI no longer shows status badges or per-song sources — acknowledgements live on `/credits`) |
 | Fingering accuracy | Fingerings must be verified, not guessed | One target instrument (OoT replica, 12-hole Alto C), kept as a data profile; each fingering records its evidence; unverified notes are simply absent |
 | Practice with a mic | Pitch detection in noisy, real rooms on phones | Isolated pitch engine (YIN), configurable tolerance in cents, calibration offset per instrument |
 | Standalone, cross-device | No server; iPhone/iPad Safari, Android Chrome, desktop | Static export (`output: "export"`) to `/out`, hostable on any HTTPS static host; all logic runs in the browser; HTTPS required for `getUserMedia` |

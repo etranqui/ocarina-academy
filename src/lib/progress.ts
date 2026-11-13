@@ -194,13 +194,21 @@ const dayKey = (t: number) => {
 /** Practice minutes per day for the last `days` days (oldest first) and the current streak. */
 export function activity(state: ProgressState, days = 28, now = Date.now()) {
   const perDay = new Map<string, number>();
-  for (const s of state.sessions ?? []) perDay.set(dayKey(s.at), (perDay.get(dayKey(s.at)) ?? 0) + s.seconds);
+  const add = (at: number, seconds: number) => perDay.set(dayKey(at), (perDay.get(dayKey(at)) ?? 0) + seconds);
+  for (const s of state.sessions ?? []) add(s.at, s.seconds);
+  // Practice saved before sessions were logged only exists in the song totals:
+  // count what the log doesn't cover on the day the song was last practiced.
+  for (const song of Object.values(state.songs)) {
+    if (!song?.lastPracticedAt) continue;
+    const logged = (state.sessions ?? []).filter((s) => s.songId === song.songId).reduce((n, s) => n + s.seconds, 0);
+    if (song.practiceSeconds > logged) add(song.lastPracticedAt, song.practiceSeconds - logged);
+  }
   const DAY = 86_400_000;
   const series = Array.from({ length: days }, (_, i) => {
     const t = now - (days - 1 - i) * DAY;
     return { date: new Date(t), seconds: perDay.get(dayKey(t)) ?? 0 };
   });
-  // Streak: consecutive days with practice, ending today (or yesterday, so it survives until you practise today).
+  // Streak: consecutive days with practice, ending today (or yesterday, so it survives until you practice today).
   let streak = 0;
   let t = perDay.has(dayKey(now)) ? now : now - DAY;
   while (perDay.has(dayKey(t))) {

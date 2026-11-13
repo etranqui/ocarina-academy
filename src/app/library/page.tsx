@@ -24,7 +24,7 @@ export default function LibraryPage() {
         <h1 className="mt-2 font-display text-4xl text-parchment-50">Song Library</h1>
         <div className="filigree mx-auto my-4 max-w-xs" />
         <p className="mx-auto max-w-xl font-serif text-parchment-200/70">
-          Difficulty and length are computed from each song&apos;s notes. Badges show exactly which content is verified.
+          Difficulty and length are computed from each song&apos;s notes.
         </p>
       </header>
 

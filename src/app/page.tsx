@@ -123,9 +123,8 @@ export default function HomePage() {
           <div>
             <h2 className="font-display text-xl text-parchment-50">Twelve songs, two ways to learn each</h2>
             <p className="mt-1 font-serif text-parchment-200/75">
-              Every song has its short <strong className="text-parchment-50">game sequence</strong> — ready to learn
-              now — and a slot for the <strong className="text-parchment-50">full musical arrangement</strong>. Full
-              arrangements are only marked complete when they come from a real transcription you supply.
+              Every song has its short <strong className="text-parchment-50">game sequence</strong> — the notes you play
+              in the game — and a longer <strong className="text-parchment-50">full arrangement</strong> of the melody.
             </p>
           </div>
         </section>

@@ -5,12 +5,6 @@ import { displayPitch } from "@/engine/music/pitch";
 
 export const metadata: Metadata = { title: "Fingering chart" };
 
-const EVIDENCE = {
-  "user-chart": { label: "From your chart", cls: "text-leaf-500 border-leaf-500/40" },
-  "full-chart": { label: "From your full chart", cls: "text-leaf-500 border-leaf-500/40" },
-  standard: { label: "Standard", cls: "text-gold-600 border-gold-500/50" },
-};
-
 export default function FingeringsPage() {
   const profile = DEFAULT_PROFILE;
   const rows = chart(profile);
@@ -54,11 +48,7 @@ export default function FingeringsPage() {
           >
             <div className="flex items-baseline justify-between">
               <h3 className="font-display text-2xl text-ink-900">{displayPitch(pitch)}</h3>
-              {fingering ? (
-                <span className={`border px-1.5 py-0.5 text-[10px] uppercase tracking-wider ${EVIDENCE[fingering.evidence].cls}`}>
-                  {EVIDENCE[fingering.evidence].label}
-                </span>
-              ) : (
+              {!fingering && (
                 <span className="border border-ink-500/40 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-ink-500">
                   Not defined
                 </span>

@@ -31,7 +31,7 @@ function phraseIds(song: Song, mode: "game" | "full") {
 function songStatus(p?: SongProgress) {
   if (!p) return { label: "Not started", cls: "text-parchment-300/55" };
   if (p.completed) return { label: "Mastered", cls: "text-gold-200" };
-  if (p.notesAttempted) return { label: "Practising", cls: "text-leaf-400" };
+  if (p.notesAttempted) return { label: "Practicing", cls: "text-leaf-400" };
   return { label: "Opened", cls: "text-parchment-200/75" };
 }
 
@@ -43,16 +43,17 @@ export function ProgressDashboard() {
   const [message, setMessage] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
 
-  // Phrases that need attention: practised, lowest accuracy first.
+  // Phrases that need attention: practiced, lowest accuracy first.
   const focus = songs
     .flatMap((song) =>
       Object.entries(progress.songs[song.id]?.phrases ?? {}).map(([key, ph]) => {
         const [mode, id] = key.split(":") as ["game" | "full", string];
-        const label = song.arrangements[mode]?.phrases.find((p) => p.id === id)?.label ?? id;
+        // Phrases from older versions of an arrangement no longer exist: skip them.
+        const label = song.arrangements[mode]?.phrases.find((p) => p.id === id)?.label;
         return { song, mode, label, acc: pct(ph.notesCorrect, ph.notesAttempted), done: ph.completed };
       }),
     )
-    .filter((f) => f.acc !== null && f.acc < 90)
+    .filter((f) => f.label && f.acc !== null && f.acc < 90)
     .sort((a, b) => a.acc! - b.acc!)
     .slice(0, 4);
 
@@ -76,7 +77,7 @@ export function ProgressDashboard() {
 
   const tiles = [
     { label: "Songs mastered", value: `${stats.completed} / 12`, hint: "Advanced run of the whole song at 80%+" },
-    { label: "Practice streak", value: act.streak ? `${act.streak} day${act.streak > 1 ? "s" : ""}` : "—", hint: `${act.activeDays} day${act.activeDays === 1 ? "" : "s"} practised in total` },
+    { label: "Practice streak", value: act.streak ? `${act.streak} day${act.streak > 1 ? "s" : ""}` : "—", hint: `${act.activeDays} day${act.activeDays === 1 ? "" : "s"} practiced in total` },
     { label: "Accuracy", value: stats.accuracy === null ? "—" : `${stats.accuracy}%`, hint: `${stats.notesCorrect} notes played correctly` },
     { label: "Practice time", value: fmtTime(stats.practiceSeconds), hint: `${stats.started} of 12 songs started` },
   ];
@@ -110,7 +111,7 @@ export function ProgressDashboard() {
                     </p>
                   </div>
                   <Link href={`/songs/${f.song.id}/practice/`} className="shrink-0 text-xs text-gold-300 underline">
-                    Practise
+                    Practice
                   </Link>
                 </li>
               ))}
@@ -118,8 +119,8 @@ export function ProgressDashboard() {
           ) : (
             <p className="mt-3 text-sm text-parchment-200/70">
               {stats.accuracy === null
-                ? "Practise a song with the microphone and your weakest phrases will show up here."
-                : "Every phrase you've practised is at 90% or better. Try a new song or a harder level."}
+                ? "Practice a song with the microphone and your weakest phrases will show up here."
+                : "Every phrase you've practiced is at 90% or better. Try a new song or a harder level."}
             </p>
           )}
         </section>
@@ -137,7 +138,7 @@ export function ProgressDashboard() {
                 <th className="px-3 py-3 font-normal">Full phrases</th>
                 <th className="px-3 py-3 text-right font-normal">Accuracy</th>
                 <th className="px-3 py-3 text-right font-normal">Time</th>
-                <th className="px-4 py-3 text-right font-normal">Last practised</th>
+                <th className="px-4 py-3 text-right font-normal">Last practiced</th>
               </tr>
             </thead>
             <tbody>

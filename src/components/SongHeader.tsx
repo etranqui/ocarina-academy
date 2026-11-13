@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { Arrangement, Song } from "@/engine/music/schema";
 import { SongEmblem } from "./SongEmblem";
-import { StatusBadge } from "./StatusBadge";
 
 export type SongTab = "overview" | "listen" | "practice";
 export type ArrangementMode = "game" | "full";
@@ -83,7 +82,6 @@ export function ModeToggle({
           </button>
         ))}
       </div>
-      <StatusBadge arrangement={arrangement} />
     </div>
   );
 }

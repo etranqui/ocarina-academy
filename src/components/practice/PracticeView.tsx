@@ -316,7 +316,7 @@ export function PracticeView({
       {snap.phase === "done" && result && (
         <div className="parchment p-5 sm:p-6">
           <h2 className="font-display text-2xl text-ink-900">
-            {result.accuracy >= 0.9 ? "Beautifully played!" : result.accuracy >= 0.7 ? "Well done!" : "Keep practising — it's coming!"}
+            {result.accuracy >= 0.9 ? "Beautifully played!" : result.accuracy >= 0.7 ? "Well done!" : "Keep practicing — it's coming!"}
           </h2>
           <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
@@ -347,7 +347,7 @@ export function PracticeView({
           )}
           <div className="mt-5 flex flex-wrap gap-3">
             <button onClick={() => void start(difficulty)} className="bg-forest-700 px-5 py-2 font-display text-xs tracking-widest text-parchment-50 hover:bg-forest-600">
-              Practise again
+              Practice again
             </button>
             {difficulty !== "advanced" && (
               <button

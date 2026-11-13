@@ -44,13 +44,6 @@ export function SequenceExplorer({ arrangement, accent }: { arrangement: Arrange
     return () => window.removeEventListener("keydown", onKey);
   }, [go, n]);
 
-  const rhythmNote =
-    arrangement.source.rhythm === "uniform"
-      ? "Shown as an even pulse — the game sequence records which notes, not their exact rhythm."
-      : arrangement.source.rhythm === "unknown"
-        ? "Pitches only — the rhythm of this passage has not been transcribed yet."
-        : null;
-
   return (
     <div className="space-y-5">
       {/* Focus note */}
@@ -113,7 +106,6 @@ export function SequenceExplorer({ arrangement, accent }: { arrangement: Arrange
 
       <FingeringStrip timeline={timeline} arrangement={arrangement} current={i} onSelect={setI} accent={accent} />
 
-      {rhythmNote && <p className="text-xs text-parchment-300/60">{rhythmNote}</p>}
       <p className="hidden text-xs text-parchment-300/60 sm:block">Keys: ← → (or number pad 4 / 6) step through notes · Home / End jump to the first / last.</p>
     </div>
   );

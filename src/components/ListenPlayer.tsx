@@ -342,8 +342,6 @@ export function ListenPlayer({ arrangement, accent }: { arrangement: Arrangement
             <Score timeline={timeline} timeSignature={arrangement.timeSignature} current={shown} onSelect={selectNote} accent={accent} />
             <p className="mt-2 text-[11px] text-ink-500">
               Treble clef, written an octave below sounding pitch (standard for Alto C ocarina).
-              {arrangement.source.rhythm !== "exact" && " Rhythm shown as an even pulse — not transcribed."}
-              {arrangement.source.rhythmNote && ` ${arrangement.source.rhythmNote}`}
             </p>
           </div>
         ) : (

@@ -51,16 +51,15 @@ between devices.
 
 Song page → **Full arrangement** → **Import a full arrangement**. Accepts uncompressed
 MusicXML (`.musicxml`/`.xml`) and MIDI (`.mid`). The file is fitted to the Alto C range and
-saved in this browser only. It's labelled *Verified* only if you confirm it's the complete
-song and every note has a verified fingering; otherwise *Partial*.
+saved in this browser only.
 
 ## Rhythm
 
 Every bundled full arrangement has a rhythm and tempo set by ear by the app's author (the tabs and charts give
-pitches only), labelled as such on the song page. The in-app rhythm editor is switched off; set `RHYTHM_EDITING`
+pitches only). The in-app rhythm editor is switched off; set `RHYTHM_EDITING`
 in `src/lib/arrangements.ts` to `true` to bring it back. Imported MusicXML/MIDI files keep their own rhythm.
 
-## Practising with the microphone
+## Practicing with the microphone
 
 Song page → **Practice**. Turn on the microphone, run **Calibrate** once (stay quiet, then
 hold an A), pick Beginner / Intermediate / Advanced and a phrase range. The microphone only

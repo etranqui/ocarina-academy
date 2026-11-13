@@ -40,7 +40,7 @@ export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_280px]">
         <div className="min-w-0 space-y-6">
-          {editable && !editing && tab !== "practice" && (
+          {RHYTHM_EDITING && editable && !editing && tab !== "practice" && (
             <div className="flex flex-wrap items-center justify-between gap-3 border border-gold-500/20 bg-black/15 px-4 py-3 text-sm">
               <span className="text-parchment-200/80">
                 <span className="text-parchment-300/60">Rhythm: </span>
@@ -115,10 +115,6 @@ export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
             ) : (
               <p className="mt-3 text-sm text-parchment-300/65">No note data yet.</p>
             )}
-            <p className="mt-4 text-xs leading-relaxed text-parchment-300/60">
-              <span className="text-parchment-200/80">Source: </span>
-              {arrangement.source.note}
-            </p>
           </div>
 
           <div className="panel p-5">

@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { Song } from "@/engine/music/schema";
 import { analyze, formatDuration } from "@/engine/music/analysis";
 import { SongEmblem } from "./SongEmblem";
-import { StatusBadge } from "./StatusBadge";
 import type { SongProgress } from "@/lib/progress";
 
 export function SongCard({ song, progress }: { song: Song; progress?: SongProgress }) {
@@ -66,8 +65,6 @@ export function SongCard({ song, progress }: { song: Song; progress?: SongProgre
       </div>
 
       <div className="mt-auto flex flex-wrap items-center gap-2">
-        <StatusBadge arrangement={song.arrangements.game} prefix="Game" />
-        <StatusBadge arrangement={song.arrangements.full} prefix="Full" />
         <span className="ml-auto font-display text-xs tracking-widest text-gold-300 opacity-80 group-hover:opacity-100">
           Learn →
         </span>

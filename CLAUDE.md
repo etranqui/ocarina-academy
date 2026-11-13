@@ -40,6 +40,9 @@ Stack: Next.js 16 App Router with `output: "export"` + `trailingSlash: true`, Re
 
 ## Content rules (enforced by tests in `src/engine/*.test.ts`)
 
+`status` and `source` stay in the data, but the UI shows neither: no Verified/Partial badges, no per-song source or rhythm notes, no fingering-evidence tags. Acknowledgements live only on `/credits` (`src/app/credits/page.tsx`, linked from the footer). The `keyNote` "Different key" banner is still shown.
+
+
 - Never fabricate transcriptions or fingerings. Every note must come from a cited source (game data, user-supplied charts/tabs, or an imported file) and the source goes in `arrangement.source.note`; flag inferences ("check by ear") there.
 - Every note in every song must have a fingering (`validateSong`), and no bundled full arrangement may be `"verified"` — only the user can confirm one.
 - Game-sequence rhythms are marked `exact` only where Nintendo's official score and the decompiled game timings agree; otherwise an even pulse with `pulseNote` explaining why.

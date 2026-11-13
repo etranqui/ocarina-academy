@@ -8,6 +8,7 @@ const NAV = [
   { href: "/library", label: "Song Library", icon: "M5 4 V20 M10 4 V20 M15 5 L19 19 M5 4 H10" },
   { href: "/fingerings", label: "Fingerings", icon: "M3 13 C3 8 9 6 15 7 C19 8 21 10 21 12 C21 15 16 17 10 17 C6 17 3 16 3 13 Z" },
   { href: "/progress", label: "Progress", icon: "M6 20 V14 M12 20 V9 M18 20 V5 M3 20 H21" },
+  { href: "/credits", label: "Credits", icon: "M12 3 L14.6 9 L21 9.5 L16 13.6 L17.6 20 L12 16.6 L6.4 20 L8 13.6 L3 9.5 L9.4 9 Z" },
 ];
 
 function isActive(path: string, href: string) {
@@ -45,16 +46,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="flex-1 pb-24 sm:pb-12">{children}</main>
+      <main className="flex-1 pb-8 sm:pb-12">{children}</main>
 
-      <footer className="hidden border-t border-gold-500/10 py-6 text-center text-xs text-parchment-300/50 sm:block">
-        A fan-made learning companion. Not affiliated with or endorsed by Nintendo. All artwork is original.
+      <footer className="border-t border-gold-500/10 px-4 pt-6 pb-24 text-center text-xs text-parchment-300/50 sm:pb-6">
+        A fan-made learning companion. Not affiliated with or endorsed by Nintendo.{" "}
+        <Link href="/credits/" className="text-gold-300/80 underline hover:text-gold-200">
+          Credits
+        </Link>
       </footer>
 
       {/* Mobile tab bar */}
       <nav
         aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-gold-500/25 bg-forest-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-gold-500/25 bg-forest-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md sm:hidden"
       >
         {NAV.map((n) => (
           <Link

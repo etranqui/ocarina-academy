@@ -47,7 +47,7 @@ export function OcarinaDiagram({
         fingering.covered.length ? fingering.covered.map((h) => HOLE_LABEL[h]).join(", ") + " covered" : "all holes open"
       }`
     : pitch
-      ? `${pitch}: no verified fingering`
+      ? `${pitch}: no fingering`
       : "Ocarina";
 
   return (
@@ -90,7 +90,7 @@ export function OcarinaDiagram({
 
       {!fingering && pitch && (
         <text x={width / 2} y={height - 30} textAnchor="middle" fontSize="34" fill="#f6eedb" opacity="0.9">
-          No verified fingering for {pitch}
+          No fingering for {pitch}
         </text>
       )}
     </svg>

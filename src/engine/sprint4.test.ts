@@ -26,9 +26,23 @@ describe("progress activity", () => {
     expect(activity(state([at(0), at(1), at(2), at(4)]), 28, NOW).streak).toBe(3);
   });
 
-  it("keeps yesterday's streak alive until you practise today", () => {
+  it("keeps yesterday's streak alive until you practice today", () => {
     expect(activity(state([at(1), at(2)]), 28, NOW).streak).toBe(2);
     expect(activity(state([at(2), at(3)]), 28, NOW).streak).toBe(0);
+  });
+
+  it("counts practice saved before sessions were logged", () => {
+    const song = (songId: string, practiceSeconds: number, daysAgo: number) => ({
+      songId, firstOpenedAt: 0, lastOpenedAt: 0, lastPracticedAt: NOW - daysAgo * DAY,
+      practiceSeconds, notesAttempted: 0, notesCorrect: 0, completed: false, phrases: {},
+    });
+    const a = activity(
+      { version: 1, songs: { "sarias-song": song("sarias-song", 150, 0), "zeldas-lullaby": song("zeldas-lullaby", 60, 2) } as ProgressState["songs"], sessions: [at(0, 90)] },
+      28, NOW,
+    );
+    expect(a.series[27].seconds).toBe(150); // 90 logged + 60 from before the log
+    expect(a.series[25].seconds).toBe(60);
+    expect(a.series.reduce((n, d) => n + d.seconds, 0)).toBe(210); // matches the song totals
   });
 
   it("works with progress saved before sessions were recorded", () => {
