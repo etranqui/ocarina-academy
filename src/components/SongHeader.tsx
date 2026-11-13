@@ -37,13 +37,13 @@ export function SongHeader({ song, tab }: { song: Song; tab: SongTab }) {
           </div>
         </div>
       </header>
-      <nav aria-label="Song sections" className="mt-6 flex gap-1 overflow-x-auto border-b border-gold-500/20">
+      <nav aria-label="Song sections" className="mt-6 flex gap-1 overflow-x-auto overflow-y-hidden border-b border-gold-500/20 [scrollbar-width:none]">
         {tabs.map((t) => (
           <Link
             key={t.id}
             href={t.href}
             aria-current={tab === t.id ? "page" : undefined}
-            className={`-mb-px shrink-0 whitespace-nowrap border-b-2 px-3 py-2.5 font-display text-xs tracking-widest transition sm:px-4 ${
+            className={`shrink-0 whitespace-nowrap border-b-2 px-3 py-2.5 font-display text-xs tracking-widest transition sm:px-4 ${
               tab === t.id ? "border-gold-300 text-gold-200" : "border-transparent text-parchment-200/60 hover:text-parchment-50"
             }`}
           >

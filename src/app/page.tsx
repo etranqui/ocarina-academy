@@ -77,7 +77,7 @@ export default function HomePage() {
             { label: "Notes played correctly", value: String(stats.notesCorrect) },
             {
               label: "Accuracy · practice time",
-              value: `${stats.accuracy === null ? "—" : `${stats.accuracy}%`} · ${formatMinutes(stats.practiceSeconds)}`,
+              value: stats.accuracy === null && !stats.practiceSeconds ? "—" : `${stats.accuracy === null ? "—" : `${stats.accuracy}%`} · ${formatMinutes(stats.practiceSeconds)}`,
             },
           ].map((s) => (
             <div key={s.label} className="panel px-5 py-4">

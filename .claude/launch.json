@@ -10,7 +10,7 @@
     {
       "name": "prod",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "out", "-l", "4173"],
+      "runtimeArgs": ["-y", "serve", "out", "-l", "4173"],
       "port": 4173
     }
   ]

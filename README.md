@@ -1,9 +1,50 @@
 # Ocarina Academy
 
-Learn the 12 songs of *Ocarina of Time* on a real 12-hole Alto C ocarina (the OoT replica).
-Fan-made, not affiliated with Nintendo; all artwork is original.
+Learn all twelve songs of *Ocarina of Time* on a real 12-hole Alto C ocarina, one fingering at a time.
+Free, no account, works offline.
 
-**Try it:** https://etranqui.github.io/ocarina-academy/ (works offline once loaded, and can be installed as an app from the browser menu)
+**▶ Open the app: https://etranqui.github.io/ocarina-academy/**
+
+![Saria's Song in Listen & Learn: the ocarina diagram shows which holes to cover for each note](docs/screenshots/listen.png)
+
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="Ocarina Academy home page" width="62%">
+  &nbsp;
+  <img src="docs/screenshots/mobile.jpg" alt="Zelda's Lullaby on a phone" width="22%">
+</p>
+
+## What you can do
+
+- **See every fingering.** A diagram of the 12-hole ocarina shows which holes to cover, note by note. Step through with the arrow keys or the on-screen buttons.
+- **Two versions of every song:** the short sequence you play in the game, and a longer full arrangement of the melody.
+- **Listen and play along.** Hear each song at 50 %, 75 % or full speed, loop a phrase, and turn on a metronome. Follow along on the score or the fingering strip.
+- **Practice with your microphone.** The app listens as you play and tells you, note by note, whether you hit it, and whether you're sharp or flat.
+- **Track your progress:** practice time, a daily streak, accuracy per song and the phrases to work on next.
+- **Install it.** Add it to your home screen or desktop and use it offline.
+
+## What you need
+
+- A **12-hole Alto C ocarina**: the classic *Ocarina of Time* replica shape, which plays A4 to F6.
+- A recent browser: Chrome, Edge, Safari or Firefox, on a phone, tablet or computer.
+- For practice mode, a microphone. Headphones help, so the app hears you rather than its own sound.
+
+## Privacy
+
+Everything runs in your browser. Your progress, calibration and any files you import stay on your
+device. There are no accounts, no tracking and no analytics. The microphone is only used while practice
+mode is on, and its sound is never recorded or sent anywhere. To move your progress to another
+device, use **Progress → Download backup / Restore backup**.
+
+## Credits
+
+The music of *The Legend of Zelda: Ocarina of Time* is by Koji Kondo; the game and its music belong
+to Nintendo. The arrangements were put together with help from the ocarina community's tabs. See the
+app's [Credits page](https://etranqui.github.io/ocarina-academy/credits/). This is a fan-made learning tool,
+not affiliated with or endorsed by Nintendo. All artwork in the app is original.
+
+---
+
+# For developers
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for architecture, data models, risks and roadmap.
 
