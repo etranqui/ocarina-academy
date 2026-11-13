@@ -6,6 +6,8 @@ import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 
 const OUT = "out";
+// Same sub-path the site was built for (BASE_PATH=/ocarina-academy on GitHub Pages).
+const BASE = process.env.BASE_PATH ?? "";
 const SKIP = [/^sw\.js$/, /\.map$/, /^404\/?/, /^_not-found/];
 
 async function walk(dir) {
@@ -28,7 +30,7 @@ for (const file of (await walk(OUT)).sort()) {
   hash.update(rel).update(buf);
   bytes += (await stat(file)).size;
   // Pages are requested by folder URL (trailingSlash), e.g. /library/ → library/index.html
-  urls.push(rel === "index.html" ? "/" : rel.endsWith("/index.html") ? `/${rel.slice(0, -"index.html".length)}` : `/${rel}`);
+  urls.push(BASE + (rel === "index.html" ? "/" : rel.endsWith("/index.html") ? `/${rel.slice(0, -"index.html".length)}` : `/${rel}`));
 }
 const version = hash.digest("hex").slice(0, 12);
 
@@ -63,7 +65,7 @@ self.addEventListener("fetch", (event) => {
       try {
         return await fetch(req);
       } catch (e) {
-        if (req.mode === "navigate") return (await cache.match("/")) || Response.error();
+        if (req.mode === "navigate") return (await cache.match(${JSON.stringify(BASE + "/")})) || Response.error();
         throw e;
       }
     })(),

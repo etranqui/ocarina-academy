@@ -36,6 +36,11 @@ on HTTPS or localhost. To try the built site locally:
 npx serve out
 ```
 
+**GitHub Pages:** every push to `main` runs `.github/workflows/pages.yml`, which tests, builds with
+`BASE_PATH=/ocarina-academy` (Pages serves the site under the repo name) and publishes it to
+https://etranqui.github.io/ocarina-academy/. Raw URLs in the code (images, service worker, manifest)
+go through `asset()` from `src/lib/basePath.ts`; `next/link` adds the prefix on its own.
+
 ## Install & offline
 
 The app is a PWA. On a phone open the HTTPS site and use **Add to Home Screen** (iOS Safari: Share menu;

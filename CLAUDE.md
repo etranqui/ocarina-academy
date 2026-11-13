@@ -36,6 +36,8 @@ Stack: Next.js 16 App Router with `output: "export"` + `trailingSlash: true`, Re
 
 **Persistence:** small LocalStorage stores read via `useSyncExternalStore` (`src/lib/localStore.ts`, `progress.ts`, `practiceSettings.ts`). Progress phrase keys are `"<game|full>:<phraseId>"`; `sessions` log drives the streak/activity chart on `/progress`.
 
+**Hosting:** GitHub Pages via `.github/workflows/pages.yml` on push to `main`, built with `BASE_PATH=/<repo>`. Any raw root-relative URL (img src, SVG `<image href>`, service worker, manifest) must go through `asset()` in `src/lib/basePath.ts`, or it breaks under the sub-path.
+
 **PWA:** `src/app/manifest.ts`; `scripts/build-sw.mjs` precaches every file in `out/` (pages keyed by folder URL, RSC `.txt` payloads matched with `ignoreSearch`), versioned by content hash. `src/components/ServiceWorker.tsx` registers it in production only.
 
 ## Content rules (enforced by tests in `src/engine/*.test.ts`)

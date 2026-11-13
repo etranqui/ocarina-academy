@@ -6,6 +6,7 @@ import { SongCard } from "@/components/SongCard";
 import { SongEmblem } from "@/components/SongEmblem";
 import { SONGS } from "@/data/songs";
 import { useSongs } from "@/lib/arrangements";
+import { asset } from "@/lib/basePath";
 import { summarize, useProgress } from "@/lib/progress";
 
 function formatMinutes(sec: number) {
@@ -57,7 +58,7 @@ export default function HomePage() {
           <div className="relative mx-auto w-full max-w-lg animate-float">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/ocarina/replica-shell.svg"
+              src={asset("/ocarina/replica-shell.svg")}
               alt="Illustration of a blue 12-hole ocarina"
               className="w-full drop-shadow-[0_30px_40px_rgb(0_0_0/0.55)]"
             />

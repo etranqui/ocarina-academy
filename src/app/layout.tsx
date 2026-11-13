@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Alegreya, Alegreya_Sans, Cinzel } from "next/font/google";
 import { AppShell } from "@/components/AppShell";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { asset } from "@/lib/basePath";
 import "./globals.css";
 
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-cinzel", weight: ["400", "600", "700"] });
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "Learn the songs of Ocarina of Time on a real 12-hole Alto C ocarina.",
   applicationName: "Ocarina Academy",
   appleWebApp: { capable: true, title: "Ocarina", statusBarStyle: "black-translucent" },
-  icons: { apple: "/icons/apple-touch-icon.png" },
+  icons: { apple: asset("/icons/apple-touch-icon.png") },
 };
 
 export const viewport: Viewport = {

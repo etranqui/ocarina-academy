@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { asset } from "@/lib/basePath";
 
 /**
  * Registers the offline service worker (production builds only) and shows a
@@ -23,7 +24,7 @@ export function ServiceWorker() {
         if (hadController) setUpdated(true); // first install needs no notice
       };
       navigator.serviceWorker.addEventListener("controllerchange", onChange);
-      navigator.serviceWorker.register("/sw.js").catch(() => {
+      navigator.serviceWorker.register(asset("/sw.js")).catch(() => {
         /* unsupported context (e.g. plain http on a LAN IP) — the app still works online */
       });
     }

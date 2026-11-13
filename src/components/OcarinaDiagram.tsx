@@ -4,6 +4,7 @@ import { useId } from "react";
 import { DEFAULT_PROFILE, getFingering, HOLE_LABEL, transition } from "@/engine/fingering/engine";
 import type { FingeringProfile, HoleDef } from "@/engine/fingering/types";
 import { displayPitch } from "@/engine/music/pitch";
+import { asset } from "@/lib/basePath";
 
 interface Props {
   pitch: string | null;
@@ -72,7 +73,7 @@ export function OcarinaDiagram({
         </filter>
       </defs>
 
-      <image href={profile.shell.href} width={width} height={height} />
+      <image href={asset(profile.shell.href)} width={width} height={height} />
 
       {profile.holes.map((h) => (
         <Hole
