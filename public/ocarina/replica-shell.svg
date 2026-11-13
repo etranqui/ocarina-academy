@@ -75,7 +75,7 @@
   </g>
   <use href="#bodyPath" fill="none" stroke="#0e2457" stroke-width="3" opacity="0.6"/>
 
-  <!-- collar: engraved silver band with the Triforce, symmetric about x = 420 -->
+  <!-- collar: engraved silver band with a triangle emblem, symmetric about x = 420 -->
   <g>
     <path d="M282 352 C380 340 470 336 558 332 L526 462 L314 462 Z" fill="url(#silver)" stroke="#5f646d" stroke-width="2"/>
     <g fill="none" stroke="#6b7079" stroke-width="3" opacity="0.8">
@@ -90,18 +90,9 @@
     <!-- recessed triangular plate -->
     <path d="M420 362 L476 452 L364 452 Z" fill="#8d929b" stroke="#5f646d" stroke-width="2.5" stroke-linejoin="round"/>
     <path d="M420 370 L469 448 L371 448 Z" fill="none" stroke="#eef0f2" stroke-width="1.5" opacity="0.8" stroke-linejoin="round"/>
-    <!-- Triforce: three gold triangles around an inverted empty one -->
-    <g fill="url(#gold)" stroke="#7a5414" stroke-width="1.8" stroke-linejoin="round">
-      <path d="M420 380 L438.5 411 L401.5 411 Z"/>
-      <path d="M401.5 411 L420 442 L383 442 Z"/>
-      <path d="M438.5 411 L457 442 L420 442 Z"/>
-    </g>
-    <path d="M401.5 411 L438.5 411 L420 442 Z" fill="#5a5f68"/>
-    <g fill="#fff6cf" opacity="0.55">
-      <path d="M420 386 L425 395 L415 395 Z"/>
-      <path d="M401.5 417 L406.5 426 L396.5 426 Z"/>
-      <path d="M438.5 417 L443.5 426 L433.5 426 Z"/>
-    </g>
+    <!-- plain gold triangle -->
+    <path d="M420 380 L457 442 L383 442 Z" fill="url(#gold)" stroke="#7a5414" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M420 390 L428 404 L412 404 Z" fill="#fff6cf" opacity="0.5"/>
   </g>
 
   <!-- hole recesses (finger-side). Thumb holes are on the underside. -->

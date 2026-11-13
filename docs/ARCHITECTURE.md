@@ -2,8 +2,8 @@
 
 A personal, fan-made learning companion for playing the 12 songs of *Ocarina of Time*
 on a physical 12-hole Alto C ocarina. Not affiliated with Nintendo. No Nintendo
-artwork, models or audio are used; all art is original SVG. The Triforce on the replica collar is a
-Nintendo trademark, fine for personal use but worth revisiting before any public release.
+artwork, models or audio are used; all art is original SVG. The replica collar carries a plain gold triangle,
+not the Triforce (a Nintendo trademark).
 
 ---
 
