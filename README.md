@@ -3,6 +3,8 @@
 Learn the 12 songs of *Ocarina of Time* on a real 12-hole Alto C ocarina (the OoT replica).
 Fan-made, not affiliated with Nintendo; all artwork is original.
 
+**Try it:** https://etranqui.github.io/ocarina-academy/ (works offline once loaded, and can be installed as an app from the browser menu)
+
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for architecture, data models, risks and roadmap.
 
 ## Run
