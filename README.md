@@ -104,7 +104,7 @@ between devices.
 ## Your songs (MIDI)
 
 Song Library → **Your songs** → **Add a song**. Choose a `.mid` file, pick the melody track (each track shows how much of it the
-Alto C can play, and ▶ plays its first bars), then name it and file it in a collection. The melody is moved to the octave, or if
+Alto C can play, a mini note chart, and plays in full from any point you click), then name it and file it in a collection. The melody is moved to the octave, or if
 needed the key, where most notes fit. Chords are reduced to their top note. Your songs and collections are saved in this browser
 only and are included in **Progress → Download backup**.
 
