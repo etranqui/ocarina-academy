@@ -22,6 +22,13 @@ export type SongId =
   | "nocturne-of-shadow"
   | "prelude-of-light";
 
+/** Songs the user adds from their own files (stored on the device, never bundled). */
+export type UserSongId = `u-${string}`;
+/** Any song the app can show: one of the 12 bundled songs or a user song. */
+export type AnySongId = SongId | UserSongId;
+
+export const isUserSongId = (id: string): id is UserSongId => id.startsWith("u-");
+
 export interface NoteEvent {
   type: "note";
   pitch: PitchName;
@@ -90,7 +97,8 @@ export type EmblemId =
   | "wave"
   | "dune"
   | "moon"
-  | "rays";
+  | "rays"
+  | "note";
 
 export interface SongTheme {
   /** Accent colour for artwork and highlights. */

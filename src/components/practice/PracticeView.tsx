@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Arrangement, SongId } from "@/engine/music/schema";
+import type { AnySongId, Arrangement } from "@/engine/music/schema";
 import { buildTimeline } from "@/engine/music/timeline";
 import { displayPitch } from "@/engine/music/pitch";
 import { getFingering, HOLE_LABEL, transition } from "@/engine/fingering/engine";
@@ -28,7 +28,7 @@ export function PracticeView({
   arrangement,
   accent,
 }: {
-  songId: SongId;
+  songId: AnySongId;
   mode: "game" | "full";
   arrangement: Arrangement;
   accent: string;

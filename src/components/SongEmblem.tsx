@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { EmblemId, SongTheme } from "@/engine/music/schema";
 
 /** Original line-art emblems, one per song, drawn in a 64×64 box. */
@@ -89,10 +90,19 @@ const GLYPHS: Record<EmblemId, React.ReactNode> = {
       <path d="M20 20 L25 25 M44 20 L39 25 M20 44 L25 39 M44 44 L39 39" />
     </>
   ),
+  note: (
+    <>
+      <path d="M26 44 L26 16 L46 12 L46 40" />
+      <ellipse cx="21" cy="45" rx="6" ry="4.6" transform="rotate(-20 21 45)" fill="currentColor" stroke="none" />
+      <ellipse cx="41" cy="41" rx="6" ry="4.6" transform="rotate(-20 41 41)" fill="currentColor" stroke="none" />
+      <path d="M26 22 L46 18" />
+    </>
+  ),
 };
 
 export function SongEmblem({ theme, size = 88, className = "" }: { theme: SongTheme; size?: number; className?: string }) {
-  const id = `emb-${theme.emblem}`;
+  // Unique per instance: user songs share the "note" emblem in different colours.
+  const id = `emb-${useId().replace(/:/g, "")}`;
   return (
     <svg viewBox="0 0 100 100" width={size} height={size} className={className} aria-hidden>
       <defs>

@@ -5,6 +5,7 @@ import { HeroScene } from "@/components/HeroScene";
 import { SongCard } from "@/components/SongCard";
 import { SongEmblem } from "@/components/SongEmblem";
 import { SONGS } from "@/data/songs";
+import type { SongId } from "@/engine/music/schema";
 import { useSongs } from "@/lib/arrangements";
 import { asset } from "@/lib/basePath";
 import { summarize, useProgress } from "@/lib/progress";
@@ -18,8 +19,9 @@ export default function HomePage() {
   const merged = useSongs();
   const SONGS_BY_ID = new Map(merged.map((s) => [s.id, s]));
   const stats = summarize(progress);
-  const recent = stats.recent.slice(0, 3);
-  const continueSong = recent[0] ? SONGS_BY_ID.get(recent[0].songId) : SONGS[0];
+  // The home page features the 12 bundled songs; your songs live under Song Library → Your songs.
+  const recent = stats.recent.filter((r) => SONGS_BY_ID.has(r.songId as SongId)).slice(0, 3);
+  const continueSong = recent[0] ? SONGS_BY_ID.get(recent[0].songId as SongId) : SONGS[0];
 
   return (
     <>
@@ -107,7 +109,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-5 md:grid-cols-3">
             {(recent.length
-              ? recent.map((r) => SONGS_BY_ID.get(r.songId)!)
+              ? recent.map((r) => SONGS_BY_ID.get(r.songId as SongId)!)
               : ["sarias-song", "zeldas-lullaby", "song-of-time"].map((id) => SONGS_BY_ID.get(id as never)!)
             ).map((song) => (
               <SongCard key={song.id} song={song} progress={progress.songs[song.id]} />

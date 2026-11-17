@@ -152,3 +152,9 @@ source      { kind: "game-reference" | "user-supplied" | "musicxml" | "midi", no
   service worker (cache-first, versioned by content hash, update notice); phone layout fixes
   (score reflows to the screen width); audio: per-voice node cleanup, de-clicked stop, playback
   pauses when the tab is hidden.
+- **Your songs (done):** Song Library → Your songs. Add a song from a MIDI file (pick the melody
+  track with a playability score and a preview, any-key fit to A4–F6, score preview), learn it with
+  the same Fingerings / Listen / Practice views, and sort songs into ordered collections (playlists,
+  with previous/next on the song page). Stored on the device in its own store
+  (`src/lib/userSongs.ts`), never mixed with the bundled songs; collections hold user songs only.
+  Backups (`src/lib/backup.ts`) now carry progress plus your songs; old progress-only backups still restore.

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import type { Song } from "@/engine/music/schema";
+import type { AnySongId, Arrangement, SongTheme } from "@/engine/music/schema";
 import { useSongs } from "@/lib/arrangements";
+import { exportBackup, restoreBackup } from "@/lib/backup";
+import { sortedSongs, userSongHref, useUserLibrary } from "@/lib/userSongs";
 import {
   activity,
-  exportProgress,
-  importProgress,
   resetProgress,
   summarize,
   useProgress,
@@ -24,8 +24,17 @@ const ago = (t?: number) => {
   return d <= 0 ? "Today" : d === 1 ? "Yesterday" : `${d} days ago`;
 };
 
-function phraseIds(song: Song, mode: "game" | "full") {
-  return [...new Set(song.arrangements[mode].phrases.map((p) => p.id))];
+/** A row of the dashboard: a bundled song or one of your songs (which has no game sequence). */
+interface Row {
+  id: AnySongId;
+  title: string;
+  theme: SongTheme;
+  arr: { game?: Arrangement; full?: Arrangement };
+  practiceHref: string;
+}
+
+function phraseIds(row: Row, mode: "game" | "full") {
+  return [...new Set((row.arr[mode]?.phrases ?? []).map((p) => p.id))];
 }
 
 function songStatus(p?: SongProgress) {
@@ -37,7 +46,12 @@ function songStatus(p?: SongProgress) {
 
 export function ProgressDashboard() {
   const progress = useProgress();
-  const songs = useSongs();
+  const bundled = useSongs();
+  const library = useUserLibrary();
+  const songs: Row[] = [
+    ...bundled.map((s) => ({ id: s.id, title: s.title, theme: s.theme, arr: s.arrangements, practiceHref: `/songs/${s.id}/practice/` })),
+    ...sortedSongs(library).map((u) => ({ id: u.id, title: u.title, theme: u.theme, arr: { full: u.arrangement }, practiceHref: userSongHref(u.id, "practice") })),
+  ];
   const stats = summarize(progress);
   const act = activity(progress);
   const [message, setMessage] = useState<string | null>(null);
@@ -49,7 +63,7 @@ export function ProgressDashboard() {
       Object.entries(progress.songs[song.id]?.phrases ?? {}).map(([key, ph]) => {
         const [mode, id] = key.split(":") as ["game" | "full", string];
         // Phrases from older versions of an arrangement no longer exist: skip them.
-        const label = song.arrangements[mode]?.phrases.find((p) => p.id === id)?.label;
+        const label = song.arr[mode]?.phrases.find((p) => p.id === id)?.label;
         return { song, mode, label, acc: pct(ph.notesCorrect, ph.notesAttempted), done: ph.completed };
       }),
     )
@@ -58,7 +72,7 @@ export function ProgressDashboard() {
     .slice(0, 4);
 
   const download = () => {
-    const blob = new Blob([exportProgress()], { type: "application/json" });
+    const blob = new Blob([exportBackup()], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `ocarina-academy-progress-${new Date().toISOString().slice(0, 10)}.json`;
@@ -68,8 +82,8 @@ export function ProgressDashboard() {
 
   const restore = async (f: File) => {
     try {
-      importProgress(await f.text());
-      setMessage("Progress restored from backup.");
+      const n = restoreBackup(await f.text());
+      setMessage(n === undefined ? "Progress restored from backup." : `Progress and ${n} of your song${n === 1 ? "" : "s"} restored from backup.`);
     } catch (e) {
       setMessage((e as Error).message);
     }
@@ -110,7 +124,7 @@ export function ProgressDashboard() {
                       {f.label} · {f.mode === "game" ? "game" : "full"} · {f.acc}%
                     </p>
                   </div>
-                  <Link href={`/songs/${f.song.id}/practice/`} className="shrink-0 text-xs text-gold-300 underline">
+                  <Link href={f.song.practiceHref} className="shrink-0 text-xs text-gold-300 underline">
                     Practice
                   </Link>
                 </li>
@@ -154,7 +168,7 @@ export function ProgressDashboard() {
                 return (
                   <tr key={song.id} className="border-b border-gold-500/10 last:border-0 hover:bg-gold-300/5">
                     <td className="px-4 py-2.5">
-                      <Link href={`/songs/${song.id}/practice/`} className="flex items-center gap-3 hover:text-gold-200">
+                      <Link href={song.practiceHref} className="flex items-center gap-3 hover:text-gold-200">
                         <SongEmblem theme={song.theme} size={32} className="shrink-0" />
                         <span className="text-parchment-50">{song.title}</span>
                       </Link>
@@ -191,7 +205,7 @@ export function ProgressDashboard() {
         <div className="mr-auto">
           <h2 className="font-display text-sm tracking-widest text-gold-200">Your data</h2>
           <p className="mt-1 text-xs text-parchment-300/60">
-            Progress lives only on this device. Download a backup to move it to another browser or phone.
+            Progress and your songs live only on this device. Download a backup to move them to another browser or phone.
           </p>
           {message && <p className="mt-2 text-sm text-leaf-400">{message}</p>}
         </div>

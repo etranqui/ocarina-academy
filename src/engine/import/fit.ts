@@ -33,10 +33,47 @@ export function bestOctaveShift(midis: number[], profile = DEFAULT_PROFILE): num
   return best;
 }
 
+/** Share of notes (0–1) that have a fingering after shifting by `shift` semitones. */
+export function playableShare(midis: number[], shift: number, profile = DEFAULT_PROFILE): number {
+  if (!midis.length) return 0;
+  return midis.filter((m) => getFingering(midiToPitch(m + shift), profile)).length / midis.length;
+}
+
+/**
+ * Best transposition in any key (-36…+36 semitones). Whole octaves win ties,
+ * then the smallest move, so a melody is only put in a new key when that
+ * makes more of its notes playable.
+ */
+export function bestTransposition(midis: number[], profile = DEFAULT_PROFILE): number {
+  let best = 0;
+  let bestScore = -1;
+  const candidates = Array.from({ length: 73 }, (_, i) => i - 36).sort(
+    (a, b) => Number(a % 12 !== 0) - Number(b % 12 !== 0) || Math.abs(a) - Math.abs(b),
+  );
+  for (const shift of candidates) {
+    const score = midis.filter((m) => getFingering(midiToPitch(m + shift), profile)).length;
+    if (score > bestScore) {
+      best = shift;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+/** Human description of a transposition, e.g. "up 1 octave" or "down 3 semitones". */
+export function describeShift(shift: number): string {
+  const dir = shift > 0 ? "up" : "down";
+  const a = Math.abs(shift);
+  if (a % 12 === 0) return `${dir} ${a / 12} octave${a > 12 ? "s" : ""}`;
+  return `${dir} ${a} semitone${a > 1 ? "s" : ""}`;
+}
+
 export interface FitOptions {
   barsPerPhrase?: number;
-  /** Override the automatic octave choice (semitones, multiple of 12). */
+  /** Override the automatic octave choice (semitones; a multiple of 12 keeps the key). */
   octaveShift?: number;
+  /** Auto mode may move the melody to another key, not just another octave. */
+  anyKey?: boolean;
   sourceKind: "musicxml" | "midi";
   fileName: string;
   /** User confirms this file is the whole song. */
@@ -45,7 +82,7 @@ export interface FitOptions {
 
 export function fitArrangement(melody: ImportedMelody, opts: FitOptions, profile = DEFAULT_PROFILE): { arrangement: Arrangement; report: FitReport } {
   const midis = melody.events.filter((e) => e.midi !== null).map((e) => e.midi!) as number[];
-  const shift = opts.octaveShift ?? bestOctaveShift(midis, profile);
+  const shift = opts.octaveShift ?? (opts.anyKey ? bestTransposition(midis, profile) : bestOctaveShift(midis, profile));
   const barsPerPhrase = Math.max(1, opts.barsPerPhrase ?? 4);
 
   // Phrase boundaries in beats: every N bars.
@@ -94,7 +131,7 @@ export function fitArrangement(melody: ImportedMelody, opts: FitOptions, profile
     highest: midiToPitch(Math.max(...shifted)),
   };
 
-  const shiftNote = shift === 0 ? "" : ` Transposed ${shift > 0 ? "up" : "down"} ${Math.abs(shift) / 12} octave${Math.abs(shift) > 12 ? "s" : ""} to fit the Alto C range.`;
+  const shiftNote = shift === 0 ? "" : ` Transposed ${describeShift(shift)} to fit the Alto C range.`;
   const playNote = allPlayable ? "" : ` ${report.unplayable.length} pitch(es) have no verified fingering yet.`;
 
   const arrangement: Arrangement = {
@@ -106,6 +143,7 @@ export function fitArrangement(melody: ImportedMelody, opts: FitOptions, profile
       rhythm: "exact",
     },
     tempoBpm: melody.bpm,
+    ...(shift % 12 !== 0 ? { keyNote: `Moved ${describeShift(shift)} from the file so more notes fit the ocarina.` } : {}),
     beatUnit: 4,
     timeSignature: melody.timeSignature,
     phrases,

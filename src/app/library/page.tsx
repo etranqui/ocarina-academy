@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LibraryHeader } from "@/components/LibraryHeader";
 import { SongCard } from "@/components/SongCard";
 import { useSongs } from "@/lib/arrangements";
 import { useProgress } from "@/lib/progress";
@@ -19,14 +20,7 @@ export default function LibraryPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <header className="mb-8 text-center">
-        <p className="font-display text-xs tracking-[0.4em] text-gold-300/80">THE SONGBOOK</p>
-        <h1 className="mt-2 font-display text-4xl text-parchment-50">Song Library</h1>
-        <div className="filigree mx-auto my-4 max-w-xs" />
-        <p className="mx-auto max-w-xl font-serif text-parchment-200/70">
-          Difficulty and length are computed from each song&apos;s notes.
-        </p>
-      </header>
+      <LibraryHeader active="oot" intro="The twelve songs of Ocarina of Time. Difficulty and length are computed from each song's notes." />
 
       <div role="tablist" aria-label="Filter songs" className="mb-8 flex justify-center gap-2">
         {FILTERS.map((f) => (

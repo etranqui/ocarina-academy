@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { SongId } from "@/engine/music/schema";
+import { isUserSongId, type AnySongId } from "@/engine/music/schema";
 
 /**
  * Local progress store (LocalStorage, versioned). The interface is small on
@@ -18,7 +18,7 @@ export interface PhraseProgress {
 }
 
 export interface SongProgress {
-  songId: SongId;
+  songId: AnySongId;
   firstOpenedAt: number;
   lastOpenedAt: number;
   lastPracticedAt?: number;
@@ -32,7 +32,7 @@ export interface SongProgress {
 /** One practice run, kept for the activity chart and streak (newest last, capped). */
 export interface PracticeSession {
   at: number;
-  songId: SongId;
+  songId: AnySongId;
   mode: "game" | "full";
   seconds: number;
   notesAttempted: number;
@@ -41,7 +41,7 @@ export interface PracticeSession {
 
 export interface ProgressState {
   version: 1;
-  songs: Partial<Record<SongId, SongProgress>>;
+  songs: Partial<Record<AnySongId, SongProgress>>;
   sessions?: PracticeSession[];
 }
 
@@ -94,7 +94,7 @@ export function useProgress(): ProgressState {
   return useSyncExternalStore(subscribe, read, () => EMPTY);
 }
 
-export function recordSongOpened(songId: SongId) {
+export function recordSongOpened(songId: AnySongId) {
   const state = read();
   const now = Date.now();
   const prev = state.songs[songId];
@@ -118,6 +118,15 @@ export function recordSongOpened(songId: SongId) {
   });
 }
 
+/** Drops a deleted user song from the totals. Its practice sessions stay, so past days on the chart don't change. */
+export function forgetSong(songId: AnySongId) {
+  const state = read();
+  if (!state.songs[songId]) return;
+  const songs = { ...state.songs };
+  delete songs[songId];
+  write({ ...state, songs });
+}
+
 export function resetProgress() {
   write(EMPTY);
 }
@@ -126,9 +135,11 @@ export function summarize(state: ProgressState) {
   const all = Object.values(state.songs).filter(Boolean) as SongProgress[];
   const attempted = all.reduce((n, s) => n + s.notesAttempted, 0);
   const correct = all.reduce((n, s) => n + s.notesCorrect, 0);
+  // "Started" and "mastered" count the 12 bundled songs only (shown as "n / 12").
+  const bundled = all.filter((s) => !isUserSongId(s.songId));
   return {
-    started: all.length,
-    completed: all.filter((s) => s.completed).length,
+    started: bundled.length,
+    completed: bundled.filter((s) => s.completed).length,
     notesCorrect: correct,
     accuracy: attempted ? Math.round((correct / attempted) * 100) : null,
     practiceSeconds: all.reduce((n, s) => n + s.practiceSeconds, 0),
@@ -146,7 +157,7 @@ export interface PracticeRecord {
 }
 
 /** Add the results of one practice run to the song's progress. */
-export function recordPractice(songId: SongId, r: PracticeRecord) {
+export function recordPractice(songId: AnySongId, r: PracticeRecord) {
   recordSongOpened(songId); // make sure the entry exists
   const state = read();
   const prev = state.songs[songId]!;
@@ -218,16 +229,15 @@ export function activity(state: ProgressState, days = 28, now = Date.now()) {
   return { series, streak, activeDays: perDay.size };
 }
 
-/** Backup: the whole progress state as JSON. */
-export function exportProgress(): string {
-  return JSON.stringify(read(), null, 2);
+/** The whole progress state (for backups, see backup.ts). */
+export const readProgress = (): ProgressState => read();
+
+/** Checks a value is a progress state. */
+export function isProgressState(v: unknown): v is ProgressState {
+  const x = v as ProgressState;
+  return !!x && x.version === 1 && typeof x.songs === "object" && x.songs !== null;
 }
 
-/** Restore a backup made with exportProgress. Throws on anything that isn't one. */
-export function importProgress(json: string) {
-  const parsed = JSON.parse(json) as ProgressState;
-  if (parsed?.version !== 1 || typeof parsed.songs !== "object" || parsed.songs === null) {
-    throw new Error("This file isn't an Ocarina Academy progress backup.");
-  }
-  write({ version: 1, songs: parsed.songs, sessions: Array.isArray(parsed.sessions) ? parsed.sessions : [] });
+export function replaceProgress(p: ProgressState) {
+  write({ version: 1, songs: p.songs, sessions: Array.isArray(p.sessions) ? p.sessions : [] });
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { analyze, formatDuration } from "@/engine/music/analysis";
 import { displayPitch, midiToPitch } from "@/engine/music/pitch";
-import type { SongId } from "@/engine/music/schema";
+import type { AnySongId, Arrangement, SongTheme } from "@/engine/music/schema";
 import { recordSongOpened } from "@/lib/progress";
 import { RHYTHM_EDITING, USER_RHYTHM_NOTE, useSong } from "@/lib/arrangements";
 import { SequenceExplorer } from "./SequenceExplorer";
@@ -12,50 +12,101 @@ import { ListenPlayer } from "./ListenPlayer";
 import { ImportPanel } from "./ImportPanel";
 import { RhythmEditor } from "./RhythmEditor";
 import { PracticeView } from "./practice/PracticeView";
-import { defaultMode, ModeToggle, SongHeader, type ArrangementMode, type SongTab } from "./SongHeader";
+import { defaultMode, ModeToggle, SongHeader, songTabHrefs, type ArrangementMode, type SongTab, type TabHrefs } from "./SongHeader";
 
+/** A bundled song: game sequence + full arrangement, with the import panel. */
 export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
   const song = useSong(songId)!;
-  const [chosen, setChosen] = useState<ArrangementMode | null>(null);
   const [editing, setEditing] = useState(false);
-  const mode = chosen ?? defaultMode(song);
-  const arrangement = song.arrangements[mode];
+  return (
+    <SongWorkspace
+      id={song.id}
+      theme={song.theme}
+      tab={tab}
+      hrefs={songTabHrefs(song.id)}
+      header={<SongHeader song={song} tab={tab} />}
+      arrangements={song.arrangements}
+      initialMode={defaultMode(song)}
+      top={(mode, arrangement, empty) => {
+        // Imported files carry their own rhythm; bundled arrangements can get one from the user.
+        const editable = !empty && !["musicxml", "midi"].includes(arrangement.source.kind);
+        return (
+          <>
+            {RHYTHM_EDITING && editable && !editing && tab !== "practice" && (
+              <RhythmBar arrangement={arrangement} mode={mode} onEdit={() => setEditing(true)} />
+            )}
+            {RHYTHM_EDITING && editable && editing && tab !== "practice" && <RhythmEditor key={mode} song={song} mode={mode} onClose={() => setEditing(false)} />}
+          </>
+        );
+      }}
+      bottom={(mode, empty) => (
+        <>
+          {mode === "full" && tab === "overview" && <ImportPanel song={song} />}
+          {mode === "full" && tab !== "overview" && empty && (
+            <p className="text-center text-sm text-parchment-300/60">
+              Import a file on the{" "}
+              <Link href={`/songs/${song.id}/`} className="text-gold-300 underline">
+                Fingerings
+              </Link>{" "}
+              tab to use the full arrangement here.
+            </p>
+          )}
+        </>
+      )}
+    />
+  );
+}
+
+/**
+ * The song page body shared by bundled songs and your songs: arrangement
+ * toggle (when there is a game sequence), the fingering / listen / practice
+ * views and the "About this arrangement" sidebar.
+ */
+export function SongWorkspace({
+  id,
+  theme,
+  tab,
+  hrefs,
+  header,
+  arrangements,
+  initialMode = "full",
+  top,
+  bottom,
+}: {
+  id: AnySongId;
+  theme: SongTheme;
+  tab: SongTab;
+  hrefs: TabHrefs;
+  header: React.ReactNode;
+  arrangements: { game?: Arrangement; full: Arrangement };
+  initialMode?: ArrangementMode;
+  top?: (mode: ArrangementMode, arrangement: Arrangement, empty: boolean) => React.ReactNode;
+  bottom?: (mode: ArrangementMode, empty: boolean) => React.ReactNode;
+}) {
+  const [chosen, setChosen] = useState<ArrangementMode | null>(null);
+  const mode: ArrangementMode = arrangements.game ? (chosen ?? initialMode) : "full";
+  const arrangement = (mode === "game" ? arrangements.game : arrangements.full)!;
   const stats = analyze(arrangement);
   const empty = arrangement.status === "needs-transcription";
-  // Imported files carry their own rhythm; bundled arrangements can get one from the user.
-  const editable = !empty && !["musicxml", "midi"].includes(arrangement.source.kind);
   const arrKey = hashKey(JSON.stringify(arrangement));
 
   useEffect(() => {
-    recordSongOpened(song.id as SongId);
-  }, [song.id]);
+    recordSongOpened(id);
+  }, [id]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <SongHeader song={song} tab={tab} />
+      {header}
 
-      <div className="mt-6">
-        <ModeToggle song={song} mode={mode} onChange={setChosen} />
-      </div>
+      {arrangements.game && (
+        <div className="mt-6">
+          <ModeToggle mode={mode} onChange={setChosen} />
+        </div>
+      )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_280px]">
         <div className="min-w-0 space-y-6">
-          {RHYTHM_EDITING && editable && !editing && tab !== "practice" && (
-            <div className="flex flex-wrap items-center justify-between gap-3 border border-gold-500/20 bg-black/15 px-4 py-3 text-sm">
-              <span className="text-parchment-200/80">
-                <span className="text-parchment-300/60">Rhythm: </span>
-                {arrangement.source.rhythm === "exact"
-                  ? arrangement.source.rhythmNote ?? "transcribed"
-                  : arrangement.source.rhythmNote ?? (mode === "full" ? "one beat per note — not transcribed yet" : "even pulse — not transcribed yet")}
-              </span>
-              {RHYTHM_EDITING && (
-                <button onClick={() => setEditing(true)} className="border border-gold-300/50 px-3 py-1 font-display text-[11px] tracking-widest text-gold-200 hover:bg-gold-300/10">
-                  {arrangement.source.rhythmNote === USER_RHYTHM_NOTE ? "Edit my rhythm" : arrangement.source.rhythm === "exact" ? "Adjust rhythm" : "Set the rhythm"}
-                </button>
-              )}
-            </div>
-          )}
-          {RHYTHM_EDITING && editable && editing && tab !== "practice" && <RhythmEditor key={mode} song={song} mode={mode} onClose={() => setEditing(false)} />}
+          {top?.(mode, arrangement, empty)}
           {mode === "full" && arrangement.keyNote && (
             <div role="note" className="border border-gold-300/40 bg-gold-300/10 px-4 py-3 text-sm text-parchment-100">
               <span className="font-display text-xs tracking-widest text-gold-200">Different key · </span>
@@ -74,23 +125,14 @@ export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
               </button>
             </div>
           ) : tab === "practice" ? (
-            <PracticeView key={`${mode}-${arrKey}`} songId={song.id as SongId} mode={mode} arrangement={arrangement} accent={song.theme.color} />
+            <PracticeView key={`${mode}-${arrKey}`} songId={id} mode={mode} arrangement={arrangement} accent={theme.color} />
           ) : tab === "listen" ? (
-            <ListenPlayer key={`${mode}-${arrKey}`} arrangement={arrangement} accent={song.theme.color} />
+            <ListenPlayer key={`${mode}-${arrKey}`} arrangement={arrangement} accent={theme.color} />
           ) : (
-            <SequenceExplorer key={`${mode}-${arrKey}`} arrangement={arrangement} accent={song.theme.color} />
+            <SequenceExplorer key={`${mode}-${arrKey}`} arrangement={arrangement} accent={theme.color} />
           )}
 
-          {mode === "full" && tab === "overview" && <ImportPanel song={song} />}
-          {mode === "full" && tab !== "overview" && empty && (
-            <p className="text-center text-sm text-parchment-300/60">
-              Import a file on the{" "}
-              <Link href={`/songs/${song.id}/`} className="text-gold-300 underline">
-                Fingerings
-              </Link>{" "}
-              tab to use the full arrangement here.
-            </p>
-          )}
+          {bottom?.(mode, empty)}
         </div>
 
         <aside className="space-y-4">
@@ -140,14 +182,14 @@ export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
                   <li>Step through each note with ← → and copy the fingering on your ocarina.</li>
                   <li>
                     Then open{" "}
-                    <Link href={`/songs/${song.id}/listen/`} className="text-gold-300 underline">
+                    <Link href={hrefs.listen} className="text-gold-300 underline">
                       Listen &amp; Learn
                     </Link>{" "}
                     to hear it and play along.
                   </li>
                   <li>
                     Finally,{" "}
-                    <Link href={`/songs/${song.id}/practice/`} className="text-gold-300 underline">
+                    <Link href={hrefs.practice} className="text-gold-300 underline">
                       Practice
                     </Link>{" "}
                     with your microphone for feedback on every note.
@@ -158,6 +200,22 @@ export function SongView({ songId, tab }: { songId: string; tab: SongTab }) {
           </div>
         </aside>
       </div>
+    </div>
+  );
+}
+
+function RhythmBar({ arrangement, mode, onEdit }: { arrangement: Arrangement; mode: ArrangementMode; onEdit: () => void }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3 border border-gold-500/20 bg-black/15 px-4 py-3 text-sm">
+      <span className="text-parchment-200/80">
+        <span className="text-parchment-300/60">Rhythm: </span>
+        {arrangement.source.rhythm === "exact"
+          ? arrangement.source.rhythmNote ?? "transcribed"
+          : arrangement.source.rhythmNote ?? (mode === "full" ? "one beat per note — not transcribed yet" : "even pulse — not transcribed yet")}
+      </span>
+      <button onClick={onEdit} className="border border-gold-300/50 px-3 py-1 font-display text-[11px] tracking-widest text-gold-200 hover:bg-gold-300/10">
+        {arrangement.source.rhythmNote === USER_RHYTHM_NOTE ? "Edit my rhythm" : arrangement.source.rhythm === "exact" ? "Adjust rhythm" : "Set the rhythm"}
+      </button>
     </div>
   );
 }

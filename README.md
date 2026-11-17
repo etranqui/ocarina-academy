@@ -19,6 +19,7 @@ Free, no account, works offline.
 - **Two versions of every song:** the short sequence you play in the game, and a longer full arrangement of the melody.
 - **Listen and play along.** Hear each song at 50 %, 75 % or full speed, loop a phrase, and turn on a metronome. Follow along on the score or the fingering strip.
 - **Practice with your microphone.** The app listens as you play and tells you, note by note, whether you hit it, and whether you're sharp or flat.
+- **Bring your own songs.** Add a MIDI file, pick the track with the melody, and learn it with the same fingerings, play-along and practice. Sort your songs into collections to make playlists.
 - **Track your progress:** practice time, a daily streak, accuracy per song and the phrases to work on next.
 - **Install it.** Add it to your home screen or desktop and use it offline.
 
@@ -30,7 +31,7 @@ Free, no account, works offline.
 
 ## Privacy
 
-Everything runs in your browser. Your progress, calibration and any files you import stay on your
+Everything runs in your browser. Your progress, calibration, your songs and any files you import stay on your
 device. There are no accounts, no tracking and no analytics. The microphone is only used while practice
 mode is on, and its sound is never recorded or sent anywhere. To move your progress to another
 device, use **Progress → Download backup / Restore backup**.
@@ -99,6 +100,13 @@ workers only run on HTTPS or localhost, and only in production builds (not `npm 
 
 Progress lives in this browser only: **Progress → Download backup / Restore backup** moves it
 between devices.
+
+## Your songs (MIDI)
+
+Song Library → **Your songs** → **Add a song**. Choose a `.mid` file, pick the melody track (each track shows how much of it the
+Alto C can play, and ▶ plays its first bars), then name it and file it in a collection. The melody is moved to the octave, or if
+needed the key, where most notes fit. Chords are reduced to their top note. Your songs and collections are saved in this browser
+only and are included in **Progress → Download backup**.
 
 ## Importing full arrangements
 
